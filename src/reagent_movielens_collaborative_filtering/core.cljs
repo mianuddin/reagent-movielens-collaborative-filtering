@@ -1,13 +1,15 @@
 (ns reagent-movielens-collaborative-filtering.core
     (:require
       [reagent.core :as r]
-      [reagent.dom :as d]))
+      [reagent.dom :as d]
+      [reagent-movielens-collaborative-filtering.components.movies :as movies]))
 
 ;; -------------------------
 ;; Views
 
 (defn home-page []
-  [:div [:h2 "Welcome to Reagent"]])
+  [:div [:h1 "Movie Rec. System"]
+        [movies/component]])
 
 ;; -------------------------
 ;; Initialize app
