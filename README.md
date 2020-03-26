@@ -1,3 +1,6 @@
+# reagent-movielens-collaborative-filtering
+
+## Usage
 
 ### Development mode
 To start the Figwheel compiler, navigate to the project folder and run the following command in the terminal:
