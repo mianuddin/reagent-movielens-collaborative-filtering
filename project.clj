@@ -33,7 +33,10 @@
                          :asset-path   "js/out"
                          :source-map true
                          :optimizations :none
-                         :pretty-print  true}
+                         :pretty-print true
+                         :foreign-libs [{:file "dist/index_bundle.js"
+                                         :provides ["dataframe-js"]
+                                         :global-exports {dataframe-js DataFrame}}]}
                         :figwheel
                         {:on-jsload "reagent-movielens-collaborative-filtering.core/mount-root"
                          :open-urls ["http://localhost:3449/index.html"]}}
@@ -44,7 +47,10 @@
                          :output-dir "target/release"
                          :optimizations :advanced
                          :infer-externs true
-                         :pretty-print false}}}}
+                         :pretty-print false
+                         :foreign-libs [{:file "dist/index_bundle.js"
+                                         :provides ["dataframe-js"]
+                                         :global-exports {dataframe-js DataFrame}}]}}}}
 
   :aliases {"package" ["do" "clean" ["cljsbuild" "once" "release"]]}
 

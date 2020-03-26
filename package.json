@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "watch": "webpack -d --watch",
+    "build": "webpack -p"
+  },
   "dependencies": {
     "dataframe-js": "^1.4.3",
     "webpack": "^4.42.1",
