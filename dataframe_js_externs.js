@@ -1,0 +1,16 @@
+var DataFrame;
+DataFrame.prototype.castAll;
+DataFrame.prototype.chain;
+DataFrame.prototype.filter;
+DataFrame.prototype.fromCSV;
+DataFrame.prototype.get;
+DataFrame.prototype.reduce;
+DataFrame.prototype.renameAll;
+DataFrame.prototype.set;
+DataFrame.prototype.show;
+DataFrame.prototype.sortBy;
+DataFrame.prototype.stat;
+DataFrame.prototype.stat.mean;
+DataFrame.prototype.toCollection;
+DataFrame.prototype.transpose;
+DataFrame.prototype.unique;

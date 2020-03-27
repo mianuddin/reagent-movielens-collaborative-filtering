@@ -1,4 +1,4 @@
-(ns reagent-movielens-collaborative-filtering.components.movies
+(ns reagent-movielens-collaborative-filtering.components.explainer
   (:require
     [reagent.core :as r]
     [dataframe-js :as DataFrame]))
@@ -29,7 +29,7 @@
 ; calculates the cosine similarity when used in the reduction of a dataframe
 (defn cosine-similarity [df]
   (/ (.reduce df numerator-reduction 0) (* (Math/sqrt (.reduce df (partial denominator-reduction "tRating") 0))
-                                         (Math/sqrt (.reduce df (partial denominator-reduction "gRating") 0)))))
+                                           (Math/sqrt (.reduce df (partial denominator-reduction "gRating") 0)))))
 
 ; calculate how similar the given movie is to the target
 (defn calculate-similarity [movies ratings target-id given-id]
@@ -63,32 +63,31 @@
       DataFrame.fromCSV
       (.then (fn [res] (reset! ratings (.castAll res #js [js/Number, js/Number, js/Number])))))
     (fn []
-      (if (and @movies @ratings)
-        (let [movies-collection (-> @movies
-                                    (.slice 0 5)
-                                    .toCollection)]
-          [:<> [:p "Let's try to recommend a movie!"]
-               [:p "First, let's see if our movies loaded in correctly."]
-               (for [movie movies-collection]
-                  [:div {:key (.-movieId movie)}
-                        [:pre {:style {:display "inline" :margin-right "1em"}} (.-movieId movie)]
-                        [:p {:style {:display "inline"}} (.-title movie)]])
-               [:p "If you can see the names of five movies, we're on track. "
-                   "Now, let's take a look at the dataframes. Here are the first ten entries of the movies:"]
-               [:pre (.show @movies 10 true)]
-               [:p "Here are the first ten entries of the ratings:"]
-               [:pre (.show @ratings 10 true)]
-               (let [new-ratings (new js/DataFrame
-                                      #js [#js [0, 1, 3.0], #js [0, 3, 4.0], #js [0, 5, 2.5], #js [0, 7, 1.0]]
-                                      #js ["userId", "movieId", "rating"])]
-                 [:<> [:p "Let's come up with some ratings for a hypothetical user 0:"]
-                      [:pre (.show new-ratings 10 true)]
-                      [:p "Here are the same ratings centered by mean:"]
-                      [:pre (.show (center-ratings new-ratings 0) 10 true)]
-                      [:p "Now, let's try to predict user 0's rating of movie 6."]
-                      [:p "We'll need to calculate cosine similarities between movies. "
-                          "For example, the cosine similarity between movies 6 and 1 is "
-                          (calculate-similarity @movies @ratings 6 1)]
-                      [:p "Here's our predicted rating for movie 6: "
-                          (predict-rating @movies @ratings 6 (center-ratings new-ratings 0) 2)]])])
-        [:p "Loading..."]))))
+      [:div [:h2 "How it works"]
+            (if (and @movies @ratings)
+              [:<> [:p "Let's try to recommend a movie!"]
+                   [:p "First, let's see if our movies loaded in correctly."]
+                   [:div {:style {:max-height "40vh"
+                                   :overflow-y "scroll"}}
+                         (for [movie (.toCollection @movies)]
+                           ^{:key (.-movieId movie)}
+                           [:div [:pre {:style {:display "inline" :margin-right "1em"}} (.-movieId movie)]
+                                 [:p {:style {:display "inline"}} (.-title movie)]])]
+                   [:p "Now, let's take a look at the dataframes. Here are the first ten entries of the movies:"]
+                   [:pre (.show @movies 10 true)]
+                   [:p "Here are the first ten entries of the ratings:"]
+                   [:pre (.show @ratings 10 true)]
+                   (let [new-ratings (new js/DataFrame
+                                           #js [#js [0, 1, 3.0], #js [0, 3, 4.0], #js [0, 5, 2.5], #js [0, 7, 1.0]]
+                                           #js ["userId", "movieId", "rating"])]
+                     [:<> [:p "Let's come up with some ratings for a hypothetical user 0:"]
+                          [:pre (.show new-ratings 10 true)]
+                          [:p "Here are the same ratings centered by mean:"]
+                          [:pre (.show (center-ratings new-ratings 0) 10 true)]
+                          [:p "Now, let's try to predict user 0's rating of movie 6."]
+                          [:p "We'll need to calculate cosine similarities between movies. "
+                              "For example, the cosine similarity between movies 6 and 1 is "
+                              (calculate-similarity @movies @ratings 6 1)]
+                          [:p "Here's our predicted rating for movie 6: "
+                              (predict-rating @movies @ratings 6 (center-ratings new-ratings 0) 2)]])]
+              [:p "Loading data..."])])))

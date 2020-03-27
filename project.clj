@@ -33,8 +33,9 @@
                          :asset-path   "js/out"
                          :source-map true
                          :optimizations :none
+                         :externs ["dataframe_js_externs.js"]
                          :pretty-print true
-                         :foreign-libs [{:file "dist/index_bundle.js"
+                         :foreign-libs [{:file "public/js/npm_packages_bundle.js"
                                          :provides ["dataframe-js"]
                                          :global-exports {dataframe-js DataFrame}}]}
                         :figwheel
@@ -46,9 +47,10 @@
                         {:output-to "public/js/app.js"
                          :output-dir "target/release"
                          :optimizations :advanced
+                         :externs ["dataframe_js_externs.js"]
                          :infer-externs true
                          :pretty-print false
-                         :foreign-libs [{:file "dist/index_bundle.js"
+                         :foreign-libs [{:file "public/js/npm_packages_bundle.js"
                                          :provides ["dataframe-js"]
                                          :global-exports {dataframe-js DataFrame}}]}}}}
 

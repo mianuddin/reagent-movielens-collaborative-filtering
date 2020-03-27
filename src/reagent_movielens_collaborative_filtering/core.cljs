@@ -2,20 +2,20 @@
     (:require
       [reagent.core :as r]
       [reagent.dom :as d]
-      [reagent-movielens-collaborative-filtering.components.movies :as movies]))
+      [reagent-movielens-collaborative-filtering.components.explainer :as explainer]))
 
 ;; -------------------------
 ;; Views
 
-(defn home-page []
-  [:<> [:h1 "Movie Rec. System"]
-        [movies/component]])
+(defn page []
+  [:<> [:h1 "Movie Recommender"]
+       [explainer/component]])
 
 ;; -------------------------
 ;; Initialize app
 
 (defn mount-root []
-  (d/render [home-page] (.getElementById js/document "app")))
+  (d/render [page] (.getElementById js/document "app")))
 
 (defn init! []
   (mount-root))
