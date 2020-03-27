@@ -45,10 +45,14 @@
   (-> (.join shared-target-ratings shared-given-ratings "userId")
       cosine-similarity))
 
+; add a column of similarities to the target movie in the given ratings df
+(defn add-similarity-col [movies ratings target-id user-ratings]
+  (.chain user-ratings
+          (fn [row] (.set row "similarity" (calculate-similarity movies ratings target-id (.get row "movieId"))))))
+      
 ; predict rating of a movie using item-based collaborative filtering
 (defn predict-rating [movies ratings target-id user-ratings & [neighborhood-size]]
-  (-> user-ratings
-      (.chain (fn [row] (.set row "similarity" (calculate-similarity movies ratings target-id (.get row "movieId")))))
+  (-> (add-similarity-col movies ratings target-id user-ratings)
       (.sortBy "similarity" true)
       (.slice 0 (or neighborhood-size 10))
       (.stat.mean "rating")))
@@ -86,8 +90,10 @@
                           [:pre (.show (center-ratings new-ratings 0) 10 true)]
                           [:p "Now, let's try to predict user 0's rating of movie 6."]
                           [:p "We'll need to calculate cosine similarities between movies. "
-                              "For example, the cosine similarity between movies 6 and 1 is "
-                              (calculate-similarity @movies @ratings 6 1)]
+                              "For example, " (calculate-similarity @movies @ratings 6 1)
+                              " is the cosine similarity between movies 6 and 1. "
+                              "Let's add a column of similarities between each movie and movie 6."]
+                          [:pre (.show (add-similarity-col @movies @ratings 6 (center-ratings new-ratings 0)) 10 true)]
                           [:p "Here's our predicted rating for movie 6: "
                               (predict-rating @movies @ratings 6 (center-ratings new-ratings 0) 2)]])]
               [:p "Loading data..."])])))
