@@ -82,8 +82,8 @@
                    [:p "Here are the first ten entries of the ratings:"]
                    [:pre (.show @ratings 10 true)]
                    (let [new-ratings (new js/DataFrame
-                                           #js [#js [0, 1, 3.0], #js [0, 3, 4.0], #js [0, 5, 2.5], #js [0, 7, 1.0]]
-                                           #js ["userId", "movieId", "rating"])]
+                                          #js [#js [0, 1, 3.0], #js [0, 3, 4.0], #js [0, 5, 2.5], #js [0, 7, 1.0]]
+                                          #js ["userId", "movieId", "rating"])]
                      [:<> [:p "Let's come up with some ratings for a hypothetical user 0:"]
                           [:pre (.show new-ratings 10 true)]
                           [:p "Here are the same ratings centered by mean:"]
@@ -94,6 +94,8 @@
                               " is the cosine similarity between movies 6 and 1. "
                               "Let's add a column of similarities between each movie and movie 6."]
                           [:pre (.show (add-similarity-col @movies @ratings 6 (center-ratings new-ratings 0)) 10 true)]
-                          [:p "Here's our predicted rating for movie 6: "
-                              (predict-rating @movies @ratings 6 (center-ratings new-ratings 0) 2)]])]
+                          [:p "Since the number of ratings we have to work with is small, let's use a neighborhood "
+                              "of two items. When we take the mean of user 0's ratings of the two movies most similar "
+                              "to movie 6, movies 1 and 7, we get a predicted rating of "
+                              (predict-rating @movies @ratings 6 (center-ratings new-ratings 0) 2) "."]])]
               [:p "Loading data..."])])))
