@@ -8,7 +8,7 @@
 ;; Views
 
 (defn home-page []
-  [:div [:h1 "Movie Rec. System"]
+  [:<> [:h1 "Movie Rec. System"]
         [movies/component]])
 
 ;; -------------------------
