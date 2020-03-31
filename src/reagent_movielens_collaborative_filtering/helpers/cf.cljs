@@ -1,10 +1,14 @@
 (ns reagent-movielens-collaborative-filtering.helpers.cf)
 
-; centers a user's ratings by their mean
-(defn center-ratings [df user-id]
+; centers ratings by their mean
+(defn center-ratings [df]
   (.chain df
           (fn [row]
-              (.set row "rating" (- (.get row "rating") (.stat.mean (.filter df #js {:userId user-id}) "rating"))))))
+              (.set row "rating" (- (.get row "rating") (.stat.mean df "rating"))))))
+
+; centers a user's ratings by their mean
+(defn center-ratings-user [df user-id]
+  (center-ratings (.filter df #js {:userId user-id})))
 
 ; creates a set of user ids from a given dataframe
 (defn get-df-user-ids [df]

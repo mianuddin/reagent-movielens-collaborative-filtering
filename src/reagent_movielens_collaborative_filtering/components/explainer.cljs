@@ -3,7 +3,7 @@
     [reagent.core :as r]
     [dataframe-js :as DataFrame]
     [reagent-movielens-collaborative-filtering.helpers.cf :refer
-      [center-ratings get-df-user-ids cosine-similarity calculate-similarity add-similarity-col predict-rating]]))
+      [center-ratings-user get-df-user-ids cosine-similarity calculate-similarity add-similarity-col predict-rating]]))
 
 (defn component [movies ratings]
   [:section [:h2 "How it works"]
@@ -34,7 +34,7 @@
               [:<> [:p "Let's come up with some ratings for a hypothetical user 0:"]
                     [:pre (.show new-ratings 10 true)]
                     [:p "Here are the same ratings centered by mean:"]
-                    [:pre (.show (center-ratings new-ratings 0) 10 true)]
+                    [:pre (.show (center-ratings-user new-ratings 0) 10 true)]
                     [:p "Now, let's try to predict user 0's rating of movie 6."]
                     [:p "We'll need to calculate cosine similarities between movies. "
                         (cond
@@ -47,7 +47,7 @@
                     (cond
                       (nil? movies) [:p "[Loading " [:i "movies.csv"] "...]"]
                       (nil? ratings) [:p "[Loading " [:i "ratings.csv"] "...]"]
-                      :else [:pre (.show (add-similarity-col movies ratings 6 (center-ratings new-ratings 0))
+                      :else [:pre (.show (add-similarity-col movies ratings 6 (center-ratings-user new-ratings 0))
                                           10
                                           true)])
                     [:p "Since the number of ratings we have to work with is small, let's use a neighborhood "
@@ -56,5 +56,5 @@
                         (cond
                           (nil? movies) [:i "[Loading movies.csv...]"]
                           (nil? ratings) [:i "[Loading ratings.csv...]"]
-                          :else [:<> (predict-rating movies ratings 6 (center-ratings new-ratings 0) 2)])
+                          :else [:<> (predict-rating movies ratings 6 (center-ratings-user new-ratings 0) 2)])
                         "."]])])

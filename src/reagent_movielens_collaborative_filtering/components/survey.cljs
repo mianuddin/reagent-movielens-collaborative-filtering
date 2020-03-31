@@ -1,12 +1,12 @@
 (ns reagent-movielens-collaborative-filtering.components.survey
   (:require
     [reagent.core :as r]
+    [dataframe-js :as DataFrame]
     [reagent-movielens-collaborative-filtering.components.movie-prompt :as movie-prompt]))
 
-(defn component [movies]
+(defn component [movies user-ratings]
   (let [shuffled-ids (r/atom nil)
         current-index (r/atom nil)
-        survey-ratings (r/atom {})
         current-rating (r/atom nil)]
     (fn [movies]
         [:section
@@ -24,25 +24,24 @@
                 [:<> [movie-prompt/component movies
                                              (get @shuffled-ids @current-index)
                                              current-rating
-                                             #(do (reset! survey-ratings
-                                                          (assoc @survey-ratings
-                                                                 (get @shuffled-ids @current-index)
-                                                                 @current-rating))
+                                             #(do (when @current-rating
+                                                    (reset! user-ratings
+                                                            (assoc @user-ratings
+                                                                  (get @shuffled-ids @current-index)
+                                                                  @current-rating)))
                                                   (reset! current-rating nil)
                                                   (swap! current-index inc))]
-                       [:div {:style {:max-height "40vh"
-                                      :overflow-y "scroll"}}
-                             (doall
-                               (for [movie-id (reverse (take @current-index @shuffled-ids))]
-                                 [:p {:key movie-id
-                                     :style {:margin 0}}
-                                     (-> movies
-                                         (.filter #(= movie-id (.get % "movieId")))
-                                         (.toCollection)
-                                         (get 0)
-                                         (.-title))
-                                     " - "
-                                     (if-let [rating (@survey-ratings movie-id)]
-                                       rating
-                                       "not rated")]))]])
+                     [:div {:style {:max-height "40vh"
+                                    :overflow-y "scroll"}}
+                           (doall
+                             (for [movie-id (reverse (take @current-index @shuffled-ids))]
+                               [:p {:key movie-id
+                                    :style {:margin 0}}
+                                   (-> movies
+                                       (.filter #(= movie-id (.get % "movieId")))
+                                       (.toCollection)
+                                       (get 0)
+                                       (.-title))
+                                   " - "
+                                   (@user-ratings movie-id "not rated")]))]])
             [:p "[Loading " [:i "movies.csv"] "...]"])])))
