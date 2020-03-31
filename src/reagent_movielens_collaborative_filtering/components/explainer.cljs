@@ -2,9 +2,8 @@
   (:require
     [reagent.core :as r]
     [dataframe-js :as DataFrame]
-    [reagent-movielens-collaborative-filtering.helpers.cf :refer [center-ratings get-df-user-ids cosine-similarity
-                                                                  calculate-similarity add-similarity-col
-                                                                  predict-rating]]))
+    [reagent-movielens-collaborative-filtering.helpers.cf :refer
+      [center-ratings get-df-user-ids cosine-similarity calculate-similarity add-similarity-col predict-rating]]))
 
 (defn component []
   (let [movies (r/atom nil)
