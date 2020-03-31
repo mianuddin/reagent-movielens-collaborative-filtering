@@ -13,4 +13,4 @@
                  :type "number"
                  :value @val}]
         [:p {:style {:display "inline"}}
-            "/ 5"]])
+            " / 5"]])
