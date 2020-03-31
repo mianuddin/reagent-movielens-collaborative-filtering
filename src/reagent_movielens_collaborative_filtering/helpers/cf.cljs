@@ -25,8 +25,9 @@
 
 ; calculates the cosine similarity when used in the reduction of a dataframe
 (defn cosine-similarity [df]
-  (/ (.reduce df numerator-reduction 0) (* (Math/sqrt (.reduce df (partial denominator-reduction "tRating") 0))
-                                           (Math/sqrt (.reduce df (partial denominator-reduction "gRating") 0)))))
+  (/ (.reduce df numerator-reduction 0)
+     (* (Math/sqrt (.reduce df (partial denominator-reduction "tRating") 0))
+        (Math/sqrt (.reduce df (partial denominator-reduction "gRating") 0)))))
 
 ; calculate how similar the given movie is to the target
 (defn calculate-similarity [movies ratings target-id given-id]

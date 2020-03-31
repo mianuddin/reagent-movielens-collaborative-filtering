@@ -10,11 +10,11 @@
   (let [movies (r/atom nil)
         ratings (r/atom nil)]
     (-> "ml-latest-small/movies.csv"
-      DataFrame.fromCSV
-      (.then (fn [res] (reset! movies (.castAll res #js [js/Number, js/String, js/String])))))
+        DataFrame.fromCSV
+        (.then (fn [res] (reset! movies (.castAll res #js [js/Number, js/String, js/String])))))
     (-> "ml-latest-small/ratings.csv"
-      DataFrame.fromCSV
-      (.then (fn [res] (reset! ratings (.castAll res #js [js/Number, js/Number, js/Number])))))
+        DataFrame.fromCSV
+        (.then (fn [res] (reset! ratings (.castAll res #js [js/Number, js/Number, js/Number])))))
     (fn []
       [:div [:h2 "How it works"]
             (if (and @movies @ratings)
