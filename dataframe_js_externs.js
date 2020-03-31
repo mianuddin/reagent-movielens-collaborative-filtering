@@ -1,7 +1,9 @@
 var DataFrame;
 DataFrame.prototype.castAll;
 DataFrame.prototype.chain;
+DataFrame.prototype.dropMissingValues;
 DataFrame.prototype.filter;
+DataFrame.prototype.find;
 DataFrame.prototype.fromCSV;
 DataFrame.prototype.get;
 DataFrame.prototype.reduce;

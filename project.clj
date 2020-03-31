@@ -49,7 +49,8 @@
                          :optimizations :advanced
                          :externs ["dataframe_js_externs.js"]
                          :infer-externs true
-                         :pretty-print false
+                         :pretty-print true
+                         :pseudo-names true
                          :foreign-libs [{:file "public/js/npm_packages_bundle.js"
                                          :provides ["dataframe-js"]
                                          :global-exports {dataframe-js DataFrame}}]}}}}

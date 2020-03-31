@@ -5,8 +5,7 @@
 
 (defn component [movies id rating-val on-next]
   [:div (if movies
-          (let [movie (first (filter #(= id (.-movieId %)) (.toCollection movies)))]
-            [:p {:style {:margin "0"}}(.-title movie)])
+          [:p {:style {:margin "0"}} (.get (.find movies #js {:movieId id}) "title")]
           [:p "[Loading " [:i "movies.csv"] "...]"])
         [rating/component rating-val]
         [:button {:type "button"

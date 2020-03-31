@@ -8,7 +8,7 @@
   (let [shuffled-ids (r/atom nil)
         current-index (r/atom nil)
         current-rating (r/atom nil)]
-    (fn [movies]
+    (fn [movies user-ratings]
         [:section
           (if movies
             (do (when-not @shuffled-ids
