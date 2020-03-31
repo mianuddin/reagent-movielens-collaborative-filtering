@@ -3,8 +3,7 @@
     [reagent.core :as r]
     [reagent.dom :as d]
     [reagent-movielens-collaborative-filtering.components.explainer :as explainer]
-    [reagent-movielens-collaborative-filtering.components.rating :as rating]
-    [reagent-movielens-collaborative-filtering.components.movie-prompt :as movie-prompt]))
+    [reagent-movielens-collaborative-filtering.components.survey :as survey]))
 
 ;; -------------------------
 ;; Views
@@ -21,7 +20,7 @@
         (.then (fn [res] (reset! ratings (.castAll res #js [js/Number, js/Number, js/Number])))))
     (fn []
         [:<> [:h1 "Movie Recommender"]
-             [movie-prompt/component @movies 1]
+             [survey/component @movies]
              [explainer/component @movies @ratings]])))
 
 ;; -------------------------
