@@ -12,8 +12,8 @@
   (let [rating-val (r/atom nil)]
     (fn []
         [:<> [:h1 "Movie Recommender"]
-             [:p "User rated the movie: " @rating-val]
-             [rating/component rating-val]
+             [:section [:p "User rated the movie: " @rating-val]
+                       [rating/component rating-val]]
              [explainer/component]])))
 
 ;; -------------------------
