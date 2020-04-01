@@ -38,12 +38,12 @@
         given-ratings (.filter ratings #js {:movieId given-id})
         shared-user-ids (clojure.set/intersection (get-df-user-ids target-ratings) (get-df-user-ids given-ratings))]
     (-> (.join (-> target-ratings
-                    (.filter #(contains? shared-user-ids (.get % "userId")))
-                    (.renameAll #js ["userId", "tMovieId", "tRating"]))
-                (-> given-ratings
-                    (.filter #(contains? shared-user-ids (.get % "userId")))
-                    (.renameAll #js ["userId", "gMovieId", "gRating"]))
-                "userId")
+                   (.filter #(contains? shared-user-ids (.get % "userId")))
+                   (.renameAll #js ["userId", "tMovieId", "tRating"]))
+               (-> given-ratings
+                   (.filter #(contains? shared-user-ids (.get % "userId")))
+                   (.renameAll #js ["userId", "gMovieId", "gRating"]))
+               "userId")
         cosine-similarity)))
 
 ; add a column of similarities to the target movie in the given ratings df
