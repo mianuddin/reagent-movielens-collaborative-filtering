@@ -21,13 +21,13 @@
           (aget movie "title")]])]
      [:> (aget Skeleton/prototype "constructor") {:count 10}])
    [:p "Now, let's take a look at the dataframes. Here are the first ten entries of the movies:"]
-   [:pre (if movies
-           (.show movies 10 true)
-           [:> (aget Skeleton/prototype "constructor") {:count 12}])]
+   (if movies
+     [:pre (.show movies 10 true)]
+     [:> (aget Skeleton/prototype "constructor") {:count 12}])
    [:p "Here are the first ten entries of the ratings:"]
-   [:pre (if ratings
-           (.show ratings 10 true)
-           [:> (aget Skeleton/prototype "constructor") {:count 12}])]
+   (if ratings
+     [:pre (.show ratings 10 true)]
+     [:> (aget Skeleton/prototype "constructor") {:count 12}])
    (let [new-ratings (new (aget DataFrame/prototype "constructor")
                           #js [#js [0, 1, 3.0], #js [0, 3, 4.0], #js [0, 5, 2.5], #js [0, 7, 1.0]]
                           #js ["userId", "movieId", "rating"])]
@@ -36,17 +36,14 @@
       [:p "Here are the same ratings centered by mean:"]
       [:pre (.show (center-ratings-user new-ratings 0) 10 true)]
       [:p "Now, let's try to predict user 0's rating of movie 6."]
-      [:p "We'll need to calculate cosine similarities between movies. "
-       (cond
-         (nil? movies) [:<> "[Loading " [:i "movies.csv"] "...] "]
-         (nil? ratings) [:<> "[Loading " [:i "ratings.csv"] "...] "]
-         :else [:<> "For example, "
-                (calculate-similarity ratings 6 1)
-                " is the cosine similarity between movies 6 and 1. "])
-       "Let's add a column of similarities between each movie and movie 6."]
+      [:p "We'll need to calculate cosine similarities between movies. For example, "
+          (cond
+            (or (nil? movies) (nil? ratings)) [:> (aget Skeleton/prototype "constructor") {:width "10em"}]
+            :else (calculate-similarity ratings 6 1))
+          " is the cosine similarity between movies 6 and 1. Let's add a column of similarities between each movie and "
+          "movie 6."]
       (cond
-        (nil? movies) [:> (aget Skeleton/prototype "constructor") {:count 6}]
-        (nil? ratings) [:> (aget Skeleton/prototype "constructor") {:count 6}]
+        (or (nil? movies) (nil? ratings)) [:> (aget Skeleton/prototype "constructor") {:count 6}]
         :else [:pre (.show (add-similarity-col ratings 6 (center-ratings-user new-ratings 0))
                            10
                            true)])
@@ -54,7 +51,6 @@
        "of two items. When we take the mean of user 0's ratings of the two movies most similar "
        "to movie 6, movies 1 and 7, we get a predicted rating of "
        (cond
-         (nil? movies) [:i "[Loading movies.csv...]"]
-         (nil? ratings) [:i "[Loading ratings.csv...]"]
+         (or (nil? movies) (nil? ratings)) [:> (aget Skeleton/prototype "constructor") {:width "5em"}]
          :else [:<> (predict-rating ratings 6 (center-ratings-user new-ratings 0) 2)])
        "."]])])
