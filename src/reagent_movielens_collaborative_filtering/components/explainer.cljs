@@ -32,7 +32,8 @@
    (let [new-ratings (new (aget DataFrame/prototype "constructor")
                           #js [#js [0, 1, 3.0], #js [0, 3, 4.0], #js [0, 5, 2.5], #js [0, 7, 1.0]]
                           #js ["userId", "movieId", "rating"])]
-     [:<> [:p "Let's come up with some ratings for a hypothetical user 0:"]
+     [:<>
+      [:p "Let's come up with some ratings for a hypothetical user 0:"]
       [:pre (.show new-ratings 10 true)]
       [:p "Here are the same ratings centered by mean:"]
       [:pre (.show (center-ratings-user new-ratings 0) 10 true)]
@@ -45,9 +46,7 @@
        "and movie 6."]
       (cond
         (or (nil? movies) (nil? ratings)) [:> (aget Skeleton/prototype "constructor") {:count 6}]
-        :else [:pre (.show (add-similarity-col ratings 6 (center-ratings-user new-ratings 0))
-                           10
-                           true)])
+        :else [:pre (.show (add-similarity-col ratings 6 (center-ratings-user new-ratings 0)) 10 true)])
       [:p "Since the number of ratings we have to work with is small, let's use a neighborhood "
        "of two items. When we take the mean of user 0's ratings of the two movies most similar "
        "to movie 6, movies 1 and 7, we get a predicted rating of "
