@@ -16,9 +16,9 @@
         user-ratings (r/atom {})
         flag (r/atom false)]
     (-> (DataFrame/fromCSV "ml-latest-small/movies.csv")
-        (.then (fn [res] (reset! movies (.castAll res #js [js/Number, js/String, js/String])))))
+        (.then #(reset! movies (.castAll % #js [js/Number, js/String, js/String]))))
     (-> (DataFrame/fromCSV "ml-latest-small/ratings.csv")
-        (.then (fn [res] (reset! ratings (.castAll res #js [js/Number, js/Number, js/Number])))))
+        (.then #(reset! ratings (.castAll % #js [js/Number, js/Number, js/Number]))))
     (fn []
         [:<>
          [:h1 "Movie Recommender"]
