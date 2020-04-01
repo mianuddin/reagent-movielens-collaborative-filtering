@@ -20,25 +20,23 @@
     (-> (DataFrame/fromCSV "ml-latest-small/ratings.csv")
         (.then (fn [res] (reset! ratings (.castAll res #js [js/Number, js/Number, js/Number])))))
     (fn []
-        [:<> [:h1 "Movie Recommender"]
+        [:<>
+         [:h1 "Movie Recommender"]
+         [:p "Predict your rating of a movie using item-based collaborative filtering!"]
          [survey/component @movies user-ratings]
+         [:h2 "Predict Ratings"]
          [:button {:type "button"
                    :on-click #(swap! flag not)}
           "toggle aliens prediction"]
-         (when (and @flag (> (count (seq @user-ratings)) 0))
-           (let [df (-> (new (aget DataFrame/prototype "constructor")
+         (when (and @flag (> (.count @user-ratings) 0))
+           (let [df (-> (new (aget DataFrame/prototype "constructor") 
                              (clj->js (seq @user-ratings))
                              #js ["movieId", "rating"])
                         (.dropMissingValues)
                         (.castAll #js [js/Number js/Number]))]
              [:<>
-              [:pre (-> df
-                        center-ratings
-                        (.show 10 true))]
-              [:p "Prediction for Aliens: "
-               (predict-rating @ratings
-                               1200
-                               (center-ratings df))]
+              [:pre (-> df center-ratings (.show 10 true))]
+              [:p "Prediction for Aliens: " (predict-rating @ratings 1200 (center-ratings df))]
               [:p "Mean before center: " (.stat.mean df "rating")]]))
          [explainer/component @movies @ratings]])))
 
