@@ -6,7 +6,8 @@
    [dataframe-js :as DataFrame]))
 
 (defn component [movies ratings]
-  [:section [:h2 "How it works"]
+  [:section
+   [:h2 "How it works"]
    [:p "Let's try to recommend a movie!"]
    [:p "First, let's see if our movies loaded in correctly."]
    (if movies
@@ -37,11 +38,11 @@
       [:pre (.show (center-ratings-user new-ratings 0) 10 true)]
       [:p "Now, let's try to predict user 0's rating of movie 6."]
       [:p "We'll need to calculate cosine similarities between movies. For example, "
-          (cond
-            (or (nil? movies) (nil? ratings)) [:> (aget Skeleton/prototype "constructor") {:width "10em"}]
-            :else (calculate-similarity ratings 6 1))
-          " is the cosine similarity between movies 6 and 1. Let's add a column of similarities between each movie and "
-          "movie 6."]
+       (cond
+         (or (nil? movies) (nil? ratings)) [:> (aget Skeleton/prototype "constructor") {:width "10em"}]
+         :else (calculate-similarity ratings 6 1))
+       " is the cosine similarity between movies 6 and 1. Let's add a column of similarities between each movie "
+       "and movie 6."]
       (cond
         (or (nil? movies) (nil? ratings)) [:> (aget Skeleton/prototype "constructor") {:count 6}]
         :else [:pre (.show (add-similarity-col ratings 6 (center-ratings-user new-ratings 0))
