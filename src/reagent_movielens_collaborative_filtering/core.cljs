@@ -28,7 +28,7 @@
          [:button {:type "button"
                    :on-click #(swap! flag not)}
           "toggle aliens prediction"]
-         (when (and @flag (> (.count @user-ratings) 0))
+         (when (and @flag (> (count (keys @user-ratings)) 0))
            (let [df (-> (new (aget DataFrame/prototype "constructor") 
                              (clj->js (seq @user-ratings))
                              #js ["movieId", "rating"])

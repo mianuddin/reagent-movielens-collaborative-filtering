@@ -7,7 +7,7 @@
 (defn component []
   (let [shuffled-ids (r/atom nil)
         current-index (r/atom nil)
-        current-rating (r/atom nil)
+        current-rating (r/atom "")
         hide-flag (r/atom true)]
     (fn [movies user-ratings]
       (when (and (not @shuffled-ids) movies)
@@ -28,9 +28,9 @@
           movies
           (get @shuffled-ids @current-index)
           current-rating
-          #(do (when @current-rating
-                 (reset! user-ratings (assoc @user-ratings (get @shuffled-ids @current-index) @current-rating)))
-               (reset! current-rating nil)
+          #(do (when (> (count @current-rating) 0)
+                 (swap! user-ratings assoc (get @shuffled-ids @current-index) @current-rating))
+               (reset! current-rating "")
                (swap! current-index inc))]
          [:<>
           [:> (aget Skeleton/prototype "constructor") {:width "10em"}]
