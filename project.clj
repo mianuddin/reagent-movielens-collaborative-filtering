@@ -6,7 +6,7 @@
 
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/clojurescript "1.10.597"]
-                 [reagent "0.10.0"]]
+                 [reagent "0.10.0" :exclusions [cljsjs/react cljsjs/react-dom]]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-figwheel "0.5.19"]]
@@ -35,8 +35,12 @@
                          :optimizations :none
                          :externs ["dataframe_js_externs.js"]
                          :pretty-print true
+                         :npm-deps false
                          :foreign-libs [{:file "public/js/npm_packages_bundle.js"
-                                         :provides ["bundle"]}]}
+                                         :provides ["react" "react-dom" "dataframe-js"]
+                                         :global-exports {react React
+                                                          react-dom ReactDOM
+                                                          dataframe-js DataFrame}}]}
                         :figwheel
                         {:on-jsload "reagent-movielens-collaborative-filtering.core/mount-root"
                          :open-urls ["http://localhost:3449/index.html"]}}
@@ -48,10 +52,12 @@
                          :optimizations :advanced
                          :externs ["dataframe_js_externs.js"]
                          :infer-externs true
-                         :pretty-print true
-                         :pseudo-names true
+                         :npm-deps false
                          :foreign-libs [{:file "public/js/npm_packages_bundle.js"
-                                         :provides ["bundle"]}]}}}}
+                                         :provides ["react" "react-dom" "dataframe-js"]
+                                         :global-exports {react React
+                                                          react-dom ReactDOM
+                                                          dataframe-js DataFrame}}]}}}}
 
   :aliases {"package" ["do" "clean" ["cljsbuild" "once" "release"]]}
 

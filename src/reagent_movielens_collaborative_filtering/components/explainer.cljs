@@ -2,7 +2,7 @@
   (:require
    [reagent-movielens-collaborative-filtering.helpers.cf :refer
     [center-ratings-user calculate-similarity add-similarity-col predict-rating]]
-   [bundle]))
+   [dataframe-js]))
 
 (defn component [movies ratings]
   (let [DataFrame (aget js/window "DataFrame")]
