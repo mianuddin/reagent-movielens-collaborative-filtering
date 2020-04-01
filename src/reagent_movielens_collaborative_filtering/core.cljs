@@ -21,26 +21,26 @@
         (.then (fn [res] (reset! ratings (.castAll res #js [js/Number, js/Number, js/Number])))))
     (fn []
         [:<> [:h1 "Movie Recommender"]
-             [survey/component @movies user-ratings]
-             [:button {:type "button"
-                       :on-click #(swap! flag not)}
-                      "toggle aliens prediction"]
-             (when (and @flag (> (count (seq @user-ratings)) 0))
-              (let [df (-> (new DataFrame/default
-                                (clj->js (seq @user-ratings))
-                                #js ["movieId", "rating"])
-                                (.dropMissingValues)
-                                (.castAll #js [js/Number js/Number]))]
-                [:<>
-                  [:pre (-> df
-                            center-ratings
-                            (.show 10 true))]
-                  [:p "Prediction for Aliens: "
-                      (predict-rating @ratings
-                                      1200
-                                      (center-ratings df))]
-                  [:p "Mean before center: " (.stat.mean df "rating")]]))
-             [explainer/component @movies @ratings]])))
+         [survey/component @movies user-ratings]
+         [:button {:type "button"
+                   :on-click #(swap! flag not)}
+          "toggle aliens prediction"]
+         (when (and @flag (> (count (seq @user-ratings)) 0))
+           (let [df (-> ((aget DataFrame/prototype "constructor")
+                             (clj->js (seq @user-ratings))
+                             #js ["movieId", "rating"])
+                        (.dropMissingValues)
+                        (.castAll #js [js/Number js/Number]))]
+             [:<>
+              [:pre (-> df
+                        center-ratings
+                        (.show 10 true))]
+              [:p "Prediction for Aliens: "
+               (predict-rating @ratings
+                               1200
+                               (center-ratings df))]
+              [:p "Mean before center: " (.stat.mean df "rating")]]))
+         [explainer/component @movies @ratings]])))
 
 ;; -------------------------
 ;; Initialize app

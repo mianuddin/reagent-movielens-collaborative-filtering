@@ -37,9 +37,10 @@
                          :pretty-print true
                          :npm-deps false
                          :foreign-libs [{:file "public/js/npm_packages_bundle.js"
-                                         :provides ["react" "react-dom" "dataframe-js"]
+                                         :provides ["react" "react-dom" "react-loading-skeleton" "dataframe-js"]
                                          :global-exports {react React
                                                           react-dom ReactDOM
+                                                          react-loading-skeleton Skeleton
                                                           dataframe-js DataFrame}}]}
                         :figwheel
                         {:on-jsload "reagent-movielens-collaborative-filtering.core/mount-root"
@@ -54,9 +55,10 @@
                          :infer-externs true
                          :npm-deps false
                          :foreign-libs [{:file "public/js/npm_packages_bundle.js"
-                                         :provides ["react" "react-dom" "dataframe-js"]
+                                         :provides ["react" "react-dom" "react-loading-skeleton" "dataframe-js"]
                                          :global-exports {react React
                                                           react-dom ReactDOM
+                                                          react-loading-skeleton Skeleton
                                                           dataframe-js DataFrame}}]}}}}
 
   :aliases {"package" ["do" "clean" ["cljsbuild" "once" "release"]]}
