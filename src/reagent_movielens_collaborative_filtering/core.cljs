@@ -26,7 +26,7 @@
                    :on-click #(swap! flag not)}
           "toggle aliens prediction"]
          (when (and @flag (> (count (seq @user-ratings)) 0))
-           (let [df (-> ((aget DataFrame/prototype "constructor")
+           (let [df (-> (new (aget DataFrame/prototype "constructor")
                              (clj->js (seq @user-ratings))
                              #js ["movieId", "rating"])
                         (.dropMissingValues)
