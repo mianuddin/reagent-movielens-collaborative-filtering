@@ -15,10 +15,10 @@
         user-ratings (r/atom {})
         flag (r/atom false)]
     (-> "ml-latest-small/movies.csv"
-        DataFrame.fromCSV
+        js/DataFrame.fromCSV
         (.then (fn [res] (reset! movies (.castAll res #js [js/Number, js/String, js/String])))))
     (-> "ml-latest-small/ratings.csv"
-        DataFrame.fromCSV
+        js/DataFrame.fromCSV
         (.then (fn [res] (reset! ratings (.castAll res #js [js/Number, js/Number, js/Number])))))
     (fn []
         [:<> [:h1 "Movie Recommender"]
@@ -37,8 +37,7 @@
                             center-ratings
                             (.show 10 true))]
                   [:p "Prediction for Aliens: "
-                      (predict-rating @movies
-                                      @ratings
+                      (predict-rating @ratings
                                       1200
                                       (center-ratings df))]
                   [:p "Mean before center: " (.stat.mean df "rating")]]))

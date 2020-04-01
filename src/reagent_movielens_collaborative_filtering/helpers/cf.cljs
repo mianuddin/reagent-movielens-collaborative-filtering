@@ -1,10 +1,9 @@
-(ns reagent-movielens-collaborative-filtering.helpers.cf)
+(ns reagent-movielens-collaborative-filtering.helpers.cf
+  (:require [clojure.set]))
 
 ; centers ratings by their mean
 (defn center-ratings [df]
-  (.chain df
-          (fn [row]
-              (.set row "rating" (- (.get row "rating") (.stat.mean df "rating"))))))
+  (.chain df #(.set % "rating" (- (.get % "rating") (.stat.mean df "rating")))))
 
 ; centers a user's ratings by their mean
 (defn center-ratings-user [df user-id]
@@ -34,27 +33,26 @@
         (Math/sqrt (.reduce df (partial denominator-reduction "gRating") 0)))))
 
 ; calculate how similar the given movie is to the target
-(defn calculate-similarity [movies ratings target-id given-id]
-  (def target-ratings (.filter ratings #js {:movieId target-id}))
-  (def given-ratings (.filter ratings #js {:movieId given-id}))
-  (def shared-user-ids (clojure.set/intersection (get-df-user-ids target-ratings) (get-df-user-ids given-ratings)))
-  (def shared-target-ratings (-> target-ratings
-                                 (.filter (fn [row] (contains? shared-user-ids (.get row "userId"))))
-                                 (.renameAll #js ["userId", "tMovieId", "tRating"])))
-  (def shared-given-ratings (-> given-ratings
-                                (.filter (fn [row] (contains? shared-user-ids (.get row "userId"))))
-                                (.renameAll #js ["userId", "gMovieId", "gRating"])))
-  (-> (.join shared-target-ratings shared-given-ratings "userId")
-      cosine-similarity))
+(defn calculate-similarity [ratings target-id given-id]
+  (let [target-ratings (.filter ratings #js {:movieId target-id})
+        given-ratings (.filter ratings #js {:movieId given-id})
+        shared-user-ids (clojure.set/intersection (get-df-user-ids target-ratings) (get-df-user-ids given-ratings))]
+    (-> (.join (-> target-ratings
+                    (.filter #(contains? shared-user-ids (.get % "userId")))
+                    (.renameAll #js ["userId", "tMovieId", "tRating"]))
+                (-> given-ratings
+                    (.filter #(contains? shared-user-ids (.get % "userId")))
+                    (.renameAll #js ["userId", "gMovieId", "gRating"]))
+                "userId")
+        cosine-similarity)))
 
 ; add a column of similarities to the target movie in the given ratings df
-(defn add-similarity-col [movies ratings target-id user-ratings]
-  (.chain user-ratings
-          (fn [row] (.set row "similarity" (calculate-similarity movies ratings target-id (.get row "movieId"))))))
+(defn add-similarity-col [ratings target-id user-ratings]
+  (.chain user-ratings #(.set % "similarity" (calculate-similarity ratings target-id (.get % "movieId")))))
       
 ; predict rating of a movie using item-based collaborative filtering
-(defn predict-rating [movies ratings target-id user-ratings & [neighborhood-size]]
-  (-> (add-similarity-col movies ratings target-id user-ratings)
+(defn predict-rating [ratings target-id user-ratings & [neighborhood-size]]
+  (-> (add-similarity-col ratings target-id user-ratings)
       (.sortBy "similarity" true)
       (.slice 0 (or neighborhood-size 10))
       (.stat.mean "rating")))

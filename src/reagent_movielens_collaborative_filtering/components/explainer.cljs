@@ -1,9 +1,7 @@
 (ns reagent-movielens-collaborative-filtering.components.explainer
   (:require
-    [reagent.core :as r]
-    [dataframe-js :as DataFrame]
     [reagent-movielens-collaborative-filtering.helpers.cf :refer
-      [center-ratings-user get-df-user-ids cosine-similarity calculate-similarity add-similarity-col predict-rating]]))
+      [center-ratings-user calculate-similarity add-similarity-col predict-rating]]))
 
 (defn component [movies ratings]
   [:section [:h2 "How it works"]
@@ -41,13 +39,13 @@
                           (nil? movies) [:<> "[Loading " [:i "movies.csv"] "...] "]
                           (nil? ratings) [:<> "[Loading " [:i "ratings.csv"] "...] "]
                           :else [:<> "For example, "
-                                    (calculate-similarity movies ratings 6 1)
+                                    (calculate-similarity ratings 6 1)
                                     " is the cosine similarity between movies 6 and 1. "])
                         "Let's add a column of similarities between each movie and movie 6."]
                     (cond
                       (nil? movies) [:p "[Loading " [:i "movies.csv"] "...]"]
                       (nil? ratings) [:p "[Loading " [:i "ratings.csv"] "...]"]
-                      :else [:pre (.show (add-similarity-col movies ratings 6 (center-ratings-user new-ratings 0))
+                      :else [:pre (.show (add-similarity-col ratings 6 (center-ratings-user new-ratings 0))
                                           10
                                           true)])
                     [:p "Since the number of ratings we have to work with is small, let's use a neighborhood "
@@ -56,5 +54,5 @@
                         (cond
                           (nil? movies) [:i "[Loading movies.csv...]"]
                           (nil? ratings) [:i "[Loading ratings.csv...]"]
-                          :else [:<> (predict-rating movies ratings 6 (center-ratings-user new-ratings 0) 2)])
+                          :else [:<> (predict-rating ratings 6 (center-ratings-user new-ratings 0) 2)])
                         "."]])])
