@@ -1,6 +1,5 @@
 (ns reagent-movielens-collaborative-filtering.components.movie-prompt
   (:require
-    [reagent.core :as r]
     [reagent-movielens-collaborative-filtering.components.rating :as rating]))
 
 (defn component [movies id rating-val on-next]
