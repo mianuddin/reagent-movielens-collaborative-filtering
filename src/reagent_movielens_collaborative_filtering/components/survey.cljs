@@ -35,8 +35,8 @@
                                     :overflow-y "scroll"}}
                            (doall
                              (for [movie-id (reverse (take @current-index @shuffled-ids))]
-                               [:p {:key movie-id
-                                    :style {:margin 0}}
+                               ^{:key movie-id}
+                               [:p {:style {:margin 0}}
                                    (-> movies
                                        (.filter #(= movie-id (.get % "movieId")))
                                        (.toCollection)

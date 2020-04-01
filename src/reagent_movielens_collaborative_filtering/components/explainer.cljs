@@ -13,12 +13,12 @@
               [:div {:style {:max-height "40vh"
                     :overflow-y "scroll"}}
                     (for [movie (.toCollection movies)]
-                      ^{:key (.-movieId movie)}
+                      ^{:key (aget movie "movieId")}
                       [:div [:pre {:style {:display "inline"
-                                  :margin-right "1em"}}
-                                  (.-movieId movie)]
+                                   :margin-right "1em"}}
+                                  (aget movie "movieId")]
                             [:p {:style {:display "inline"}}
-                                (.-title movie)]])]
+                                (aget movie "title")]])]
               [:p "[Loading " [:i "movies.csv"] "...]"])
             [:p "Now, let's take a look at the dataframes. Here are the first ten entries of the movies:"]
             [:pre (if movies
