@@ -1,7 +1,6 @@
 (ns reagent-movielens-collaborative-filtering.components.survey
   (:require
     [reagent.core :as r]
-    [dataframe-js :as DataFrame]
     [reagent-movielens-collaborative-filtering.components.movie-prompt :as movie-prompt]))
 
 (defn component [movies user-ratings]

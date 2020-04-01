@@ -36,8 +36,7 @@
                          :externs ["dataframe_js_externs.js"]
                          :pretty-print true
                          :foreign-libs [{:file "public/js/npm_packages_bundle.js"
-                                         :provides ["dataframe-js"]
-                                         :global-exports {dataframe-js DataFrame}}]}
+                                         :provides ["bundle"]}]}
                         :figwheel
                         {:on-jsload "reagent-movielens-collaborative-filtering.core/mount-root"
                          :open-urls ["http://localhost:3449/index.html"]}}
@@ -52,8 +51,7 @@
                          :pretty-print true
                          :pseudo-names true
                          :foreign-libs [{:file "public/js/npm_packages_bundle.js"
-                                         :provides ["dataframe-js"]
-                                         :global-exports {dataframe-js DataFrame}}]}}}}
+                                         :provides ["bundle"]}]}}}}
 
   :aliases {"package" ["do" "clean" ["cljsbuild" "once" "release"]]}
 
