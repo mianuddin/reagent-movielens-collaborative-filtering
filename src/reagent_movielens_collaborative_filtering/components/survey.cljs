@@ -3,7 +3,7 @@
     [reagent.core :as r]
     [reagent-movielens-collaborative-filtering.components.movie-prompt :as movie-prompt]))
 
-(defn component [movies user-ratings]
+(defn component []
   (let [shuffled-ids (r/atom nil)
         current-index (r/atom nil)
         current-rating (r/atom nil)]
