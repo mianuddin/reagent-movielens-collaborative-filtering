@@ -1,6 +1,4 @@
-(ns reagent-movielens-collaborative-filtering.components.rating
-  (:require
-    [reagent.core :as r]))
+(ns reagent-movielens-collaborative-filtering.components.rating)
 
 (defn component [val]
   [:div [:input {:min 0.5
