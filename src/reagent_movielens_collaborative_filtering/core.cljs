@@ -12,7 +12,6 @@
 (defn page []
   (let [movies (r/atom nil)
         ratings (r/atom nil)
-        rating-val (r/atom nil)
         user-ratings (r/atom {})
         flag (r/atom false)]
     (-> "ml-latest-small/movies.csv"
