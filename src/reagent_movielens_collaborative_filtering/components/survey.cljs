@@ -24,14 +24,16 @@
        [:h2 "Rate Movies"]
        [:p "To predict how you would rate a movie, we'll first need to get an idea of your taste."]
        (if (and @shuffled-ids @current-index)
-         [movie-prompt/component
-          movies
-          (get @shuffled-ids @current-index)
-          current-rating
-          #(do (when (> (count @current-rating) 0)
-                 (swap! user-ratings assoc (get @shuffled-ids @current-index) @current-rating))
-               (reset! current-rating "")
-               (swap! current-index inc))]
+         (if (= (count @shuffled-ids) (+ 1 @current-index))
+           [:p "No more movies!"]
+           [movie-prompt/component
+            movies
+            (get @shuffled-ids @current-index)
+            current-rating
+            #(do (when (> (count @current-rating) 0)
+                   (swap! user-ratings assoc (get @shuffled-ids @current-index) @current-rating))
+                 (reset! current-rating "")
+                 (swap! current-index inc))])
          [:<>
           [:> (aget Skeleton/prototype "constructor") {:width "10em"}]
           [:> (aget Skeleton/prototype "constructor") {:width "5em"}]])
