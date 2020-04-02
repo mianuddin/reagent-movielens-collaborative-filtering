@@ -28,10 +28,11 @@
          [:h2 "Predict Ratings"]
          (if (> (count (keys @user-ratings)) 10)
            [:<>
+            [:p "Search for a movie to see your predicted rating."]
             [search/component
              @movies
              #(reset! selected-movie-id (-> % .-target (.getAttribute "data-movie-id") (js/parseInt 10)))]
-            (when @selected-movie-id
+            (when (and @movies @ratings @selected-movie-id)
               (let [df (-> (new (aget DataFrame/prototype "constructor")
                                 (clj->js (seq @user-ratings))
                                 #js ["movieId", "rating"])
@@ -43,13 +44,13 @@
                                                   (center-ratings df)
                                                   (Math/round (Math/log2 (.count df))))]
                 [:<>
-                 [:p
-                  "Predicted rating for "
-                  (-> @movies (.find #js {:movieId @selected-movie-id}) (.get "title"))
+                 [:p {:style {:margin-bottom 0}}
+                  "Your predicted rating for "
+                  [:strong (-> @movies (.find #js {:movieId @selected-movie-id}) (.get "title"))]
                   ": "
                   (+ centered-pred mean)]
-                 [:p "Centered prediction: " centered-pred]
-                 [:p "Mean before center: " mean]]))]
+                 [:p {:style {:margin 0}} "Centered prediction: " centered-pred]
+                 [:p {:style {:margin 0}} "Mean before center: " mean]]))]
            [:p "Please rate at least 10 movies to see predictions."])
          [explainer/component @movies @ratings]])))
 
