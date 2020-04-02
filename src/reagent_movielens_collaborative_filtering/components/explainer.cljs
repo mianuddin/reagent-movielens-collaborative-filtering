@@ -7,7 +7,7 @@
 
 (defn component [movies ratings]
   [:section
-   [:h2 "How it works"]
+   [:h2 "How It Works"]
    [:p "Let's try to recommend a movie!"]
    [:p "First, let's see if our movies loaded in correctly."]
    (if movies
@@ -21,7 +21,8 @@
          [:p {:style {:display "inline"}}
           (aget movie "title")]])]
      [:> (aget Skeleton/prototype "constructor") {:count 10}])
-   [:p "Now, let's take a look at the dataframes. Here are the first ten entries of the movies:"]
+   [:p "Now, let's take a look at the dataframes."]
+   [:p "Here are the first ten entries of the movies:"]
    (if movies
      [:pre (.show movies 10 true)]
      [:> (aget Skeleton/prototype "constructor") {:count 12}])
@@ -29,6 +30,11 @@
    (if ratings
      [:pre (.show ratings 10 true)]
      [:> (aget Skeleton/prototype "constructor") {:count 12}])
+   [:p "The data used on this page comes from "
+    [:a {:href "https://grouplens.org/datasets/movielens/latest/"}
+     "GroupLens Research's Movielens Latest Small Dataset (9/2018)"]
+    ". Further, it has been preprocessed to remove all but the 500 most reviewed movies. This allows the calculations "
+    "to run within the browser."]
    (let [new-ratings (new (aget DataFrame/prototype "constructor")
                           #js [#js [0, 1, 3.0], #js [0, 3, 4.0], #js [0, 5, 2.5], #js [0, 7, 1.0]]
                           #js ["userId", "movieId", "rating"])]
@@ -53,4 +59,4 @@
        (cond
          (or (nil? movies) (nil? ratings)) [:> (aget Skeleton/prototype "constructor") {:width "5em"}]
          :else [:<> (predict-rating ratings 6 (center-ratings-user new-ratings 0) 2)])
-       "."]])])
+       "! That's the gist of how item-based collaborative filtering produces ratings."]])])
