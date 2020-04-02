@@ -1,0 +1,9 @@
+// Compiled by ClojureScript 1.10.597 {}
+goog.provide('reagent_movielens_collaborative_filtering.components.movie_prompt');
+goog.require('cljs.core');
+goog.require('reagent_movielens_collaborative_filtering.components.rating');
+reagent_movielens_collaborative_filtering.components.movie_prompt.component = (function reagent_movielens_collaborative_filtering$components$movie_prompt$component(movies,id,rating_val,on_next){
+return new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"div","div",1057191632),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"strong","strong",269529000),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"style","style",-496642736),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"margin","margin",-995903681),"0"], null)], null),movies.find(({"movieId": id})).get("title")], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [reagent_movielens_collaborative_filtering.components.rating.component,rating_val], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"button","button",1456579943),new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null,"type","type",1174270348),"button",new cljs.core.Keyword(null,"on-click","on-click",1632826543),on_next,new cljs.core.Keyword(null,"disabled","disabled",-1529784218),(((cljs.core.count.call(null,cljs.core.deref.call(null,rating_val)) > (0))) && ((cljs.core.re_matches.call(null,/^0\.5|[1234](?:.5)?|5$/,cljs.core.deref.call(null,rating_val)) == null)))], null),"Next movie"], null)], null);
+});
+
+//# sourceMappingURL=movie_prompt.js.map?rel=1585783659337
