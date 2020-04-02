@@ -5,6 +5,7 @@
    [reagent-movielens-collaborative-filtering.helpers.cf :refer [center-ratings predict-rating]]
    [reagent-movielens-collaborative-filtering.components.explainer :as explainer]
    [reagent-movielens-collaborative-filtering.components.survey :as survey]
+   [reagent-movielens-collaborative-filtering.components.search :as search]
    [dataframe-js :as DataFrame]))
 
 ;; -------------------------
@@ -14,7 +15,7 @@
   (let [movies (r/atom nil)
         ratings (r/atom nil)
         user-ratings (r/atom {})
-        flag (r/atom false)]
+        selected-movie-id (r/atom nil)]
     (-> (DataFrame/fromCSV "ml-latest-small/movies.csv")
         (.then #(reset! movies (.castAll % #js [js/Number, js/String, js/String]))))
     (-> (DataFrame/fromCSV "ml-latest-small/ratings.csv")
@@ -25,19 +26,31 @@
          [:p "Predict your rating of a movie using item-based collaborative filtering!"]
          [survey/component @movies user-ratings]
          [:h2 "Predict Ratings"]
-         [:button {:type "button"
-                   :on-click #(swap! flag not)}
-          "toggle aliens prediction"]
-         (when (and @flag (> (count (keys @user-ratings)) 0))
-           (let [df (-> (new (aget DataFrame/prototype "constructor") 
-                             (clj->js (seq @user-ratings))
-                             #js ["movieId", "rating"])
-                        (.dropMissingValues)
-                        (.castAll #js [js/Number js/Number]))]
-             [:<>
-              [:pre (-> df center-ratings (.show 10 true))]
-              [:p "Prediction for Aliens: " (predict-rating @ratings 1200 (center-ratings df))]
-              [:p "Mean before center: " (.stat.mean df "rating")]]))
+         (if (> (count (keys @user-ratings)) 10)
+           [:<>
+            [search/component
+             @movies
+             #(reset! selected-movie-id (-> % .-target (.getAttribute "data-movie-id") (js/parseInt 10)))]
+            (when @selected-movie-id
+              (let [df (-> (new (aget DataFrame/prototype "constructor")
+                                (clj->js (seq @user-ratings))
+                                #js ["movieId", "rating"])
+                           (.dropMissingValues)
+                           (.castAll #js [js/Number js/Number]))
+                    mean (.stat.mean df "rating")
+                    centered-pred (predict-rating @ratings
+                                                  @selected-movie-id
+                                                  (center-ratings df)
+                                                  (Math/round (Math/log2 (.count df))))]
+                [:<>
+                 [:p
+                  "Predicted rating for "
+                  (-> @movies (.find #js {:movieId @selected-movie-id}) (.get "title"))
+                  ": "
+                  (+ centered-pred mean)]
+                 [:p "Centered prediction: " centered-pred]
+                 [:p "Mean before center: " mean]]))]
+           [:p "Please rate at least 10 movies to see predictions."])
          [explainer/component @movies @ratings]])))
 
 ;; -------------------------
