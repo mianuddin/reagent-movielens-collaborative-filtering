@@ -19,13 +19,14 @@
                 :placeholder "Search for a movie..."
                 :value @term}]
        (when (and movies (> (count @term) 0))
-         [:div.search-results {:style {:max-height "40vh"
+         [:div.search-results {:style {:max-height "20vh"
                                        :overflow-y "scroll"}}
           (for [movie (-> movies
                           (.chain
                            clean-title-col
-                           #(every? (partial includes? (lower-case (.get % "clean-title"))) (split @term " "))
-                           (partial create-fuzzy-col @term))
+                           #(every? (partial includes? (lower-case (.get % "clean-title")))
+                                    (split (lower-case @term) " "))
+                           (partial create-fuzzy-col (lower-case @term)))
                           (.sortBy "fuzzy" true)
                           (.head 10)
                           (.toCollection))]
