@@ -54,5 +54,5 @@
 (defn predict-rating [ratings target-id user-ratings & [neighborhood-size]]
   (-> (add-similarity-col ratings target-id user-ratings)
       (.sortBy "similarity" true)
-      (.slice 0 (or neighborhood-size 10))
+      (.head (or neighborhood-size 10))
       (.stat.mean "rating")))
